@@ -33,6 +33,7 @@ class User < ApplicationRecord
   
   def feed_microposts
     Micropost.where(user_id: self.following_ids + [self.id])
+    Micropost.where(user_id: self.iining_ids + [self.id])
   end
   
   def okiniiri(other_user)
