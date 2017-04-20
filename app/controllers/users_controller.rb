@@ -38,6 +38,18 @@ class UsersController < ApplicationController
     counts(@user)
   end
   
+  def iinings
+    @user = User.find(params[:id])
+    @iinings = @user.iinings.page(params[:page])
+    counts(@user)
+  end
+  
+  def iiners
+    @user = User.find(params[:id])
+    @iiners = @user.iinerss.page(params[:page])
+    counts(@user)
+  end
+  
   private
 
   def user_params

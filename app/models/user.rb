@@ -11,6 +11,11 @@ class User < ApplicationRecord
   has_many :reverses_of_relationship, class_name: 'Relationship', foreign_key: 'follow_id'
   has_many :followers, through: :reverses_of_relationship, source: :user
   
+  has_many :favorites
+  has_many :iinings, through: :favorites, source: :okiniiri
+  has_many :reverses_of_favorite, class_name: 'Favorite', foreign_key: 'okiniiri_id'
+  has_many :iiners, through: :reverses_of_favorite, source: :user
+  
   def follow(other_user)
     unless self == other_user
       self.relationships.find_or_create_by(follow_id: other_user.id)
@@ -29,4 +34,20 @@ class User < ApplicationRecord
   def feed_microposts
     Micropost.where(user_id: self.following_ids + [self.id])
   end
+  
+  def okiniiri(other_user)
+    unless self == other_user
+      self.favorite.find_or_create_by(okiniiri_id: other_user.id)
+    end
+  end
+
+  def unokiniiri(other_user)
+    favorite = self.favorites.find_by(okiniiri_id: other_user.id)
+    favorite.destroy if favorite
+  end
+
+  def iining?(other_user)
+    self.iinings.include?(other_user)
+  end
+  
 end
