@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170419022155) do
+ActiveRecord::Schema.define(version: 20170420043555) do
+
+  create_table "favorites", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "user_id"
+    t.integer  "okiniiri_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["okiniiri_id"], name: "index_favorites_on_okiniiri_id", using: :btree
+    t.index ["user_id", "okiniiri_id"], name: "index_favorites_on_user_id_and_okiniiri_id", unique: true, using: :btree
+    t.index ["user_id"], name: "index_favorites_on_user_id", using: :btree
+  end
 
   create_table "microposts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "content"
@@ -18,6 +28,16 @@ ActiveRecord::Schema.define(version: 20170419022155) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_microposts_on_user_id", using: :btree
+  end
+
+  create_table "okiniiris", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "user_id"
+    t.integer  "iine_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["iine_id"], name: "index_okiniiris_on_iine_id", using: :btree
+    t.index ["user_id", "iine_id"], name: "index_okiniiris_on_user_id_and_iine_id", unique: true, using: :btree
+    t.index ["user_id"], name: "index_okiniiris_on_user_id", using: :btree
   end
 
   create_table "relationships", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -38,7 +58,11 @@ ActiveRecord::Schema.define(version: 20170419022155) do
     t.datetime "updated_at",      null: false
   end
 
+  add_foreign_key "favorites", "users"
+  add_foreign_key "favorites", "users", column: "okiniiri_id"
   add_foreign_key "microposts", "users"
+  add_foreign_key "okiniiris", "users"
+  add_foreign_key "okiniiris", "users", column: "iine_id"
   add_foreign_key "relationships", "users"
   add_foreign_key "relationships", "users", column: "follow_id"
 end

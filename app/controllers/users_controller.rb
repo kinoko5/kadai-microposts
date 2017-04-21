@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :require_user_logged_in, only: [:index, :show]
+  before_action :require_user_logged_in, only: [:index, :show,:followings, :followers,:iinings, :iiners]
   def index
      @users = User.all.page(params[:page])
   end
@@ -39,15 +39,15 @@ class UsersController < ApplicationController
   end
   
   def iinings
-    @user = User.find(params[:id])
-    @iinings = @user.iinings.page(params[:page])
-    counts(@user)
+    @micropost = Micropost.find(params[:id])
+    @iinings = @micropost.iinings.page(params[:page])
+    counts(@micropost)
   end
   
   def iiners
-    @user = User.find(params[:id])
-    @iiners = @user.iinerss.page(params[:page])
-    counts(@user)
+    @micropost = Micropost.find(params[:id])
+    @iiners = @micropost.iiners.page(params[:page])
+    counts(@micropost)
   end
   
   private

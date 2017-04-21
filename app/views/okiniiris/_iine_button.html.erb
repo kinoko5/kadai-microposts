@@ -1,0 +1,13 @@
+<% unless current_user == user %>
+  <% if current_user.iining?(user) %>
+    <%= form_for(current_user.okiniiris.find_by(iine_id: user.id), html: { method: :delete }) do |f| %>
+      <%= hidden_field_tag :iine_id, user.id %>
+      <%= f.submit 'Uniine', class: 'btn btn-danger btn-block' %>
+    <% end %>
+  <% else %>
+    <%= form_for(current_user.okiniiris.build) do |f| %>
+      <%= hidden_field_tag :iine_id, user.id %>
+      <%= f.submit 'Iine', class: 'btn btn-primary btn-block' %>
+    <% end %>
+  <% end %>
+<% end %>

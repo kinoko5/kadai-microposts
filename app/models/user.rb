@@ -11,10 +11,10 @@ class User < ApplicationRecord
   has_many :reverses_of_relationship, class_name: 'Relationship', foreign_key: 'follow_id'
   has_many :followers, through: :reverses_of_relationship, source: :user
   
-  has_many :favorites
-  has_many :iinings, through: :favorites, source: :okiniiri
-  has_many :reverses_of_favorite, class_name: 'Favorite', foreign_key: 'okiniiri_id'
-  has_many :iiners, through: :reverses_of_favorite, source: :user
+  has_many :okiniiris
+  has_many :iinings, through: :okiniiris, source: :iine
+  has_many :reverses_of_okiniiri, class_name: 'Okiniiri', foreign_key: 'iine_id'
+  has_many :iiners, through: :reverses_of_okiniiri, source: :micropost
   
   def follow(other_user)
     unless self == other_user
@@ -36,19 +36,19 @@ class User < ApplicationRecord
     Micropost.where(user_id: self.iining_ids + [self.id])
   end
   
-  def okiniiri(other_user)
-    unless self == other_user
-      self.favorite.find_or_create_by(okiniiri_id: other_user.id)
+  def iine(micropost)
+    unless self == micropost.user
+      self.okiniiris.find_or_create_by(iine_id: micropost.id)
     end
   end
 
-  def unokiniiri(other_user)
-    favorite = self.favorites.find_by(okiniiri_id: other_user.id)
-    favorite.destroy if favorite
+  def uniine(micropost)
+    okiniiri = self.okiniiris.find_by(iine_id: micropost.id)
+    okiniiri.destroy if okiniiri
   end
 
-  def iining?(other_user)
-    self.iinings.include?(other_user)
+  def iining?(micropost)
+    self.iinings.include?(micropost)
   end
   
 end
